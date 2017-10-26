@@ -18,20 +18,16 @@ def register(request):
     email = request.POST['email']
     password = request.POST['password']
     confirm_password = request.POST['confirm_password']
-    print 'pppppp'
     context = {'Name': Name,'Alias': Alias, 'email': email, 'password': password, 'confirm_password': confirm_password}
-    print 'asdf'
     errors = User.objects.validate(context)
-    print 'jk'
     if errors:
         for tag, error in errors.iteritems():
             messages.error(request, error, extra_tags=tag)
-            print 'yugjh'
             return redirect('/')
-        else:
-            hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-            user = User.objects.create(Name = Name, Alias = Alias, email = email, password = hashed_password )
-            return redirect('/quotes')
+    else:
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+        user = User.objects.create(Name = Name, Alias = Alias, email = email, password = hashed_password )
+        return redirect('/quotes')
 
 def login(request):
     email = request.POST['email']
@@ -94,11 +90,12 @@ def quotes(request):
     return render(request, "quotes/quotes.html", context)
 
 def users(request, number):
+    
     context = {}
-    posting = User.objects.get(id = number)
-    context['quotes'] = posting
-    context['num'] = len(Quote.objects.filter(uploader = posting))
-    context['quotes'] = Quote.objects.filter(uploader = posting)
+    theUser = User.objects.get(id = number)
+    context['quotes'] = theUser
+    context['tot'] = len(Quote.objects.filter(uploader = theUser))
+    context['quotes'] = Quote.objects.filter(uploader = theUser)
     return render(request, 'quotes/user.html', context)
 
 def favourite(request, number):
