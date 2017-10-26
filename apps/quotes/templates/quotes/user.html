@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>user</title>
+</head>
+<body>
+    <div>
+        <a href="/logout" >Logout</a>
+        <a href="/quotes" >Dashboard</a>
+    </div>
+    <div>
+        <p>Posts by: {{quote.uploader.Name}}</p>
+        <p>Count: </p>
+    </div>
+    <div>
+        {% for quote in quotes %}
+            <p>{{quote.author}}</p>
+            <p>{{quote.info}}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

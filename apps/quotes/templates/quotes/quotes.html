@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Welcome</title>
+    </head>
+    <body>
+
+        <div>
+            {% csrf_token %}
+            <nav>
+                <h1> Welcome, {{user.Name}}!</h1>
+                <a href="/logout" >Logout</a>
+            </nav>
+            <div class="quotablequotes">
+                <h1>Quotable Quotes</h1>
+                <div>
+                    {%for quote in quotes%}
+                        <p>{{quote.author}}</p>
+                        <p>{{quote.id}}</p>
+                        <p>{{quote.info}}</p>
+                        <p>Posted by: <a href="/users/{{quote.uploader.id}}">{{quote.uploader.Name}}</a></p>
+                        <button type="button" onclick="alert('added to your list!!')"><a href="/favourite/{{quote.id}}">Add to my list</a></button>
+                    {%endfor%}
+                </div>    
+            </div>
+
+            <div class="favourite">
+                <h1>Favourite Quotes</h1>
+                <div>
+                    {%for quote in liked%}
+                        <p>{{quote}}</p>
+                        <p>{{quote.message}}</p>
+                        <p>Posted by: <a href="/users/{{quote.uploader.id}}">{{quote.uploader.Name}}</a></p>
+                        <button type="button" onclick="alert('removed from my list!!')"><a href="/remove/{{quote.id}}">Remove from my list</a></button>
+                    {%endfor%}    
+                </div>
+            </div>
+                
+            <div class="contribute">
+                <h1>Contribute a  Quote</h1>
+                <form action="/add" method='post'>
+                    {% csrf_token %}
+                    Quoted by:<input type="text" name="author"><br>
+                    Message: <input type="text" name="info"><br>
+                    <input type="hidden" name="user" value="{{user.id}}">
+                    <input type='submit' value='Add Quote'/>
+                </form>
+            </div>
+            
+            <div>
+                {% if messages %}
+                    {% for message in messages %}
+                    <h4>{{message}}</h4>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </body>
+</html>
